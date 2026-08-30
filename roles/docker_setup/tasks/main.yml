@@ -1,16 +1,16 @@
 ---
 - name: Установка утилиты dnf-utils
-  dnf:
+  ansible.builtin.dnf:
     name: dnf-utils
     state: present
 
 - name: Добавление официального репозитория Docker
-  command: dnf config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+  ansible.builtin.command: dnf config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
   args:
     creates: /etc/yum.repos.d/docker-ce.repo
 
 - name: Установка базовых пакетов Docker
-  dnf:
+  ansible.builtin.dnf:
     name:
       - docker-ce
       - docker-ce-cli
@@ -18,18 +18,18 @@
     state: present
 
 - name: Запуск и добавление Docker в автозагрузку
-  systemd:
+  ansible.builtin.systemd:
     name: docker
     state: started
-    enabled: yes
+    enabled: true
 
 - name: Установка python3-pip
-  dnf:
+  ansible.builtin.dnf:
     name: python3-pip
     state: present
 
 - name: Установка Python-библиотеки docker для Ansible через pip
-  pip:
+  ansible.builtin.pip:
     name: docker
     executable: pip3
     state: present
