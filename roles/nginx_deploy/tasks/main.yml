@@ -1,0 +1,23 @@
+---
+- name: Создание директории для данных на хосте
+  file:
+    path: "{{ host_data_dir }}"
+    state: directory
+    mode: '0755'
+
+- name: Развертывание кастомной страницы index.html из шаблона Jinja2
+  template:
+    src: index.html.j2
+    dest: "{{ host_data_dir }}/index.html"
+    mode: '0644'
+
+- name: Запуск контейнера Nginx с подключенным томом (Volume)
+  docker_container:
+    name: my-nginx
+    image: "{{ nginx_image }}"
+    state: started
+    restart_policy: always
+    ports:
+      - "{{ nginx_port }}:80"
+    volumes:
+      - "{{ host_data_dir }}:/usr/share/nginx/html:ro"
