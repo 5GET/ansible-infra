@@ -1,0 +1,48 @@
+---
+- name: Установка Docker и запуск Nginx
+  hosts: webservers
+  become: yes
+  tasks:
+    - name: Установка утилиты dnf-utils
+      dnf:
+        name: dnf-utils
+        state: present
+
+    - name: Добавление официального репозитория Docker
+      command: dnf config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+      args:
+        creates: /etc/yum.repos.d/docker-ce.repo
+
+    - name: Установка базовых пакетов Docker
+      dnf:
+        name:
+          - docker-ce
+          - docker-ce-cli
+          - containerd.io
+        state: present
+
+    - name: Запуск и добавление Docker в автозагрузку
+      systemd:
+        name: docker
+        state: started
+        enabled: yes
+
+    - name: Установка python3-pip
+      dnf:
+        name: python3-pip
+        state: present
+
+    - name: Установка Python-библиотеки docker для Ansible через pip
+      pip:
+        name: docker
+        executable: pip3
+        state: present
+
+    - name: Запуск контейнера Nginx
+      docker_container:
+        name: my-nginx
+        image: nginx:latest
+        state: started
+        restart_policy: always
+        ports:
+          - "8080:80"
