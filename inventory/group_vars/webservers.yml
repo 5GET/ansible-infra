@@ -1,0 +1,7 @@
+---
+# Переменные для веб-серверов
+app_name: "My Ansible App"
+nginx_port: 8080
+nginx_image: "nginx:latest"
+host_data_dir: "/opt/nginx-data"
+custom_message: "Привет! Этот сервер настроен с помощью Ansible. Хост: {{ inventory_hostname }}"
