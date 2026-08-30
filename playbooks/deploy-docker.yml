@@ -1,8 +1,8 @@
 ---
 - name: Развертывание инфраструктуры Docker и Nginx
   hosts: webservers
-  become: yes
-  
+  become: true
+
   roles:
     - role: docker_setup
       tags: [docker, setup]
