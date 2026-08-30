@@ -1,0 +1,20 @@
+# Ansible
+*.retry
+ansible/inventory/*.backup
+ansible/inventory/*~
+
+# SSH keys
+*.pem
+id_rsa
+id_rsa.pub
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor files
+*.swp
+*.swo
+*~
+.vscode/
+.idea/
