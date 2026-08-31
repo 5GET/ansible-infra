@@ -1,0 +1,16 @@
+global:
+  resolve_timeout: 5m
+
+route:
+  group_by: ['alertname', 'job']
+  group_wait: 30s
+  group_interval: 5m
+  repeat_interval: 4h
+  receiver: 'ntfy'
+
+receivers:
+  - name: 'ntfy'
+    webhook_configs:
+      - url: 'https://ntfy.sh/my-infra-alerts-2026'
+        send_resolved: true
+        max_alerts: 5

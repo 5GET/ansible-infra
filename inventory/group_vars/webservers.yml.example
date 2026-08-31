@@ -1,0 +1,3 @@
+---
+# Пример конфигурации. Скопируйте этот файл в webservers_secret.yml и заполните реальными значениями.
+ntfy_topic: "your-unique-ntfy-topic-name"

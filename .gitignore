@@ -18,3 +18,4 @@ Thumbs.db
 *~
 .vscode/
 .idea/
+inventory/group_vars/webservers_secret.yml
