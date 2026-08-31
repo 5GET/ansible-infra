@@ -1,0 +1,26 @@
+---
+- name: Создание директории для Alertmanager
+  ansible.builtin.file:
+    path: /opt/alertmanager
+    state: directory
+    mode: '0755'
+
+- name: Развертывание конфигурации Alertmanager
+  ansible.builtin.template:
+    src: alertmanager_config.yml.j2
+    dest: /opt/alertmanager/alertmanager.yml
+    mode: '0644'
+
+- name: Запуск контейнера Alertmanager
+  community.docker.docker_container:
+    name: alertmanager
+    image: prom/alertmanager:latest
+    state: started
+    restart_policy: always
+    ports:
+      - "{{ alertmanager_port }}:9093"
+    volumes:
+      - /opt/alertmanager/alertmanager.yml:/etc/alertmanager/alertmanager.yml:ro
+    command:
+      - '--config.file=/etc/alertmanager/alertmanager.yml'
+      - '--storage.path=/alertmanager'

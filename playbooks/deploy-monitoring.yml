@@ -1,0 +1,18 @@
+---
+- name: Установка экспортеров на все хосты
+  hosts: webservers
+  become: true
+  roles:
+    - role: exporters
+      tags: [exporters, monitoring]
+
+- name: Установка стека мониторинга (Prometheus + Grafana + Alertmanager)
+  hosts: monitoring
+  become: true
+  roles:
+    - role: prometheus
+      tags: [prometheus, monitoring]
+    - role: grafana
+      tags: [grafana, monitoring]
+    - role: alertmanager
+      tags: [alertmanager, monitoring]

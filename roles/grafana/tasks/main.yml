@@ -1,0 +1,30 @@
+---
+- name: Создание директорий для провижининга Grafana
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    mode: '0755'
+  loop:
+    - /opt/grafana/provisioning/datasources
+    - /opt/grafana/provisioning/dashboards
+
+- name: Развертывание конфигурации datasource для Prometheus
+  ansible.builtin.copy:
+    src: provisioning/datasources/prometheus.yml
+    dest: /opt/grafana/provisioning/datasources/prometheus.yml
+    mode: '0644'
+
+- name: Запуск контейнера Grafana
+  community.docker.docker_container:
+    name: grafana
+    image: grafana/grafana:latest
+    state: started
+    restart_policy: always
+    ports:
+      - "{{ grafana_port }}:3000"
+    env:
+      GF_SECURITY_ADMIN_PASSWORD: "{{ grafana_admin_password }}"
+      GF_INSTALL_PLUGINS: ""
+    volumes:
+      - /opt/grafana/provisioning:/etc/grafana/provisioning
+      - grafana-data:/var/lib/grafana
