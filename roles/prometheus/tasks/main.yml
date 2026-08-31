@@ -1,23 +1,23 @@
 ---
-- name: Создание директории для конфигурации Prometheus
+- name: Create Prometheus configuration directory
   ansible.builtin.file:
     path: /opt/prometheus
     state: directory
     mode: '0755'
 
-- name: Развертывание конфигурации Prometheus из шаблона
+- name: Deploy Prometheus configuration from template
   ansible.builtin.template:
     src: prometheus.yml.j2
     dest: /opt/prometheus/prometheus.yml
     mode: '0644'
 
-- name: Развертывание правил алертов
+- name: Deploy alert rules
   ansible.builtin.copy:
     src: alerts.yml
     dest: /opt/prometheus/alerts.yml
     mode: '0644'
 
-- name: Запуск Prometheus в контейнере
+- name: Run Prometheus container
   community.docker.docker_container:
     name: prometheus
     image: prom/prometheus:latest

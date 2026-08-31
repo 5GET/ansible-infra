@@ -1,5 +1,5 @@
 ---
-- name: Создание директорий для провижининга Grafana
+- name: Create Grafana provisioning directories
   ansible.builtin.file:
     path: "{{ item }}"
     state: directory
@@ -8,13 +8,13 @@
     - /opt/grafana/provisioning/datasources
     - /opt/grafana/provisioning/dashboards
 
-- name: Развертывание конфигурации datasource для Prometheus
+- name: Deploy Prometheus datasource configuration
   ansible.builtin.copy:
     src: provisioning/datasources/prometheus.yml
     dest: /opt/grafana/provisioning/datasources/prometheus.yml
     mode: '0644'
 
-- name: Запуск контейнера Grafana
+- name: Run Grafana container
   community.docker.docker_container:
     name: grafana
     image: grafana/grafana:latest

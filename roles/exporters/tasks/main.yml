@@ -1,5 +1,5 @@
 ---
-- name: Запуск Node Exporter для мониторинга хоста
+- name: Run Node Exporter for host monitoring
   community.docker.docker_container:
     name: node-exporter
     image: prom/node-exporter:latest
@@ -18,7 +18,7 @@
       - '--path.rootfs=/rootfs'
       - '--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)'
 
-- name: Запуск cAdvisor для мониторинга Docker-контейнеров
+- name: Run cAdvisor for Docker container monitoring
   community.docker.docker_container:
     name: cadvisor
     image: gcr.io/cadvisor/cadvisor:latest

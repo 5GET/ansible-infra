@@ -1,5 +1,5 @@
 ---
-- name: Развертывание инфраструктуры Docker и Nginx
+- name: Deploy Docker and Nginx infrastructure
   hosts: webservers
   become: true
 

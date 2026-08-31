@@ -9,8 +9,8 @@ groups:
         labels:
           severity: critical
         annotations:
-          summary: " Сервер упал: {{ $labels.instance }}"
-          description: "Сервер {{ $labels.instance }} не доступен более 1 минуты"
+          summary: "Server is down: {{ $labels.instance }}"
+          description: "Server {{ $labels.instance }} is unreachable for more than 1 minute"
 
       - alert: HighCPUUsage
         expr: 100 - (avg by(instance) (irate(node_cpu_seconds_total{mode="idle"}[5m])) * 100) > 90
@@ -18,8 +18,8 @@ groups:
         labels:
           severity: warning
         annotations:
-          summary: "️ Высокая загрузка CPU: {{ $labels.instance }}"
-          description: "Загрузка CPU {{ $value | printf \"%.1f\" }}% на сервере {{ $labels.instance }}"
+          summary: "High CPU usage: {{ $labels.instance }}"
+          description: "CPU usage {{ $value | printf \"%.1f\" }}% on server {{ $labels.instance }}"
 
       - alert: HighDiskUsage
         expr: (1 - (node_filesystem_avail_bytes{fstype!="tmpfs"} / node_filesystem_size_bytes{fstype!="tmpfs"})) * 100 > 85
@@ -27,8 +27,8 @@ groups:
         labels:
           severity: warning
         annotations:
-          summary: " Мало места на диске: {{ $labels.instance }}"
-          description: "Использование диска {{ $value | printf \"%.1f\" }}% на {{ $labels.mountpoint }}"
+          summary: "Low disk space: {{ $labels.instance }}"
+          description: "Disk usage {{ $value | printf \"%.1f\" }}% on {{ $labels.mountpoint }}"
 
       - alert: ContainerDown
         expr: count(container_last_seen) by (name) < 1
@@ -36,5 +36,5 @@ groups:
         labels:
           severity: critical
         annotations:
-          summary: "🐳 Контейнер упал: {{ $labels.name }}"
-          description: "Контейнер {{ $labels.name }} не отправляет метрики"
+          summary: "Container is down: {{ $labels.name }}"
+          description: "Container {{ $labels.name }} is not sending metrics"

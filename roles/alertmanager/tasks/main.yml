@@ -1,17 +1,17 @@
 ---
-- name: Создание директории для Alertmanager
+- name: Create Alertmanager directory
   ansible.builtin.file:
     path: /opt/alertmanager
     state: directory
     mode: '0755'
 
-- name: Развертывание конфигурации Alertmanager
+- name: Deploy Alertmanager configuration
   ansible.builtin.template:
     src: alertmanager_config.yml.j2
     dest: /opt/alertmanager/alertmanager.yml
     mode: '0644'
 
-- name: Запуск контейнера Alertmanager
+- name: Run Alertmanager container
   community.docker.docker_container:
     name: alertmanager
     image: prom/alertmanager:latest
