@@ -20,13 +20,18 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: Install dependencies
+      - name: Install Ansible
         run: |
           python -m pip install --upgrade pip
-          pip install ansible ansible-lint docker
+          pip install ansible ansible-lint
 
       - name: Install Ansible collections
         run: ansible-galaxy collection install -r requirements.yml
+
+      - name: Create dummy vault password file for CI
+        run: |
+          echo "dummy_password_for_ci_lint" > .vault_pass
+          chmod 600 .vault_pass
 
       - name: Run ansible-lint
         run: ansible-lint playbooks/
