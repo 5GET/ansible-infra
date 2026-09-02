@@ -9,6 +9,8 @@
 - name: Install monitoring stack (Prometheus + Grafana + Alertmanager)
   hosts: monitoring
   become: true
+  vars_files:
+    - ../inventory/group_vars/webservers_secret.yml
   roles:
     - role: prometheus
       tags: [prometheus, monitoring]
@@ -16,3 +18,5 @@
       tags: [grafana, monitoring]
     - role: alertmanager
       tags: [alertmanager, monitoring]
+    - role: nginx_proxy
+      tags: [nginx_proxy, monitoring]

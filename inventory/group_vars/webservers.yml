@@ -17,3 +17,8 @@ grafana_admin_password: "admin123"
 
 # Alertmanager
 alertmanager_port: 9093
+# Nginx Reverse Proxy
+nginx_proxy_domain: "monitoring.local"
+nginx_proxy_ssl_cert: "/etc/nginx/ssl/server.crt"
+nginx_proxy_ssl_key: "/etc/nginx/ssl/server.key"
+nginx_proxy_htpasswd: "/etc/nginx/.htpasswd"

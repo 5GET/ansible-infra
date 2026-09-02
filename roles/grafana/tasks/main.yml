@@ -14,7 +14,7 @@
     dest: /opt/grafana/provisioning/datasources/prometheus.yml
     mode: '0644'
 
-- name: Run Grafana container
+- name: Run Grafana container (CLEAN STATE)
   community.docker.docker_container:
     name: grafana
     image: grafana/grafana:latest
@@ -24,7 +24,6 @@
       - "{{ grafana_port }}:3000"
     env:
       GF_SECURITY_ADMIN_PASSWORD: "{{ grafana_admin_password }}"
-      GF_INSTALL_PLUGINS: ""
     volumes:
       - /opt/grafana/provisioning:/etc/grafana/provisioning
       - grafana-data:/var/lib/grafana

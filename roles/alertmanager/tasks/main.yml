@@ -11,7 +11,7 @@
     dest: /opt/alertmanager/alertmanager.yml
     mode: '0644'
 
-- name: Run Alertmanager container
+- name: Run Alertmanager container (CLEAN STATE)
   community.docker.docker_container:
     name: alertmanager
     image: prom/alertmanager:latest

@@ -17,7 +17,7 @@
     dest: /opt/prometheus/alerts.yml
     mode: '0644'
 
-- name: Run Prometheus container
+- name: Run Prometheus container (CLEAN STATE)
   community.docker.docker_container:
     name: prometheus
     image: prom/prometheus:latest

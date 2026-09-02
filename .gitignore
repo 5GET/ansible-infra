@@ -1,1 +1,2 @@
 inventory/group_vars/webservers_secret.yml
+.vault_pass
