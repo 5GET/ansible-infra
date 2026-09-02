@@ -1,0 +1,6 @@
+---
+skip_list:
+  - syntax-check
+warn_list:
+  - experimental
+  - role-name
