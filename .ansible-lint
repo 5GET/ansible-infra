@@ -1,6 +1,9 @@
 ---
+profile: production
 skip_list:
-  - syntax-check
+  - yaml[line-length]
+  - yaml[truthy]
+  - name[missing]
+  - risky-file-permissions
 warn_list:
   - experimental
-  - role-name
