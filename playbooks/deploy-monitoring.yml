@@ -9,10 +9,10 @@
 - name: Install monitoring stack (Prometheus + Grafana + Alertmanager + Uptime Kuma)
   hosts: monitoring
   become: true
-  
+
   vars_files:
     - ../inventory/group_vars/webservers_secret.yml
-    
+
   roles:
     - role: prometheus
       tags: [prometheus, monitoring]
