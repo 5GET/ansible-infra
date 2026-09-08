@@ -1,0 +1,52 @@
+---
+- name: Create Loki directories
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    mode: '0755'
+  loop:
+    - /opt/loki
+    - /opt/loki/data
+
+- name: Deploy Loki configuration
+  ansible.builtin.copy:
+    dest: /opt/loki/loki-config.yml
+    mode: '0644'
+    content: |
+      auth_enabled: false
+      server:
+        http_listen_port: 3100
+      common:
+        path_prefix: /loki
+        storage:
+          filesystem:
+            chunks_directory: /loki/chunks
+            rules_directory: /loki/rules
+        replication_factor: 1
+        ring:
+          kvstore:
+            store: inmemory
+      schema_config:
+        configs:
+          - from: "2024-01-01"
+            store: tsdb
+            object_store: filesystem
+            schema: v13
+            index:
+              prefix: index_
+              period: 24h
+      limits_config:
+        retention_period: 168h
+
+- name: Run Loki container
+  community.docker.docker_container:
+    name: loki
+    image: grafana/loki:latest
+    state: started
+    restart_policy: always
+    ports:
+      - "3100:3100"
+    volumes:
+      - /opt/loki/loki-config.yml:/etc/loki/local-config.yaml:ro
+      - /opt/loki/data:/loki
+    command: -config.file=/etc/loki/local-config.yaml

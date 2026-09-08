@@ -1,0 +1,52 @@
+---
+- name: Create Promtail directory
+  ansible.builtin.file:
+    path: /opt/promtail
+    state: directory
+    mode: '0755'
+
+- name: Deploy Promtail configuration
+  ansible.builtin.copy:
+    dest: /opt/promtail/promtail-config.yml
+    mode: '0644'
+    content: |
+      server:
+        http_listen_port: 9080
+        grpc_listen_port: 0
+      positions:
+        filename: /tmp/positions.yaml
+      clients:
+        - url: http://192.168.0.140:3100/loki/api/v1/push
+      scrape_configs:
+        - job_name: docker
+          static_configs:
+            - targets:
+                - localhost
+              labels:
+                job: docker
+                __path__: /var/lib/docker/containers/*/*-json.log
+          pipeline_stages:
+            - docker: {}
+        - job_name: system
+          static_configs:
+            - targets:
+                - localhost
+              labels:
+                job: syslog
+                __path__: /var/log/messages
+
+- name: Run Promtail container
+  community.docker.docker_container:
+    name: promtail
+    image: grafana/promtail:latest
+    state: started
+    restart_policy: always
+    volumes:
+      # Монтируем конфиг
+      - /opt/promtail/promtail-config.yml:/etc/promtail/config.yml:ro
+      # Монтируем логи хоста (флаг :z важен для SELinux в CentOS/RHEL)
+      - /var/log:/var/log:ro,z
+      - /var/lib/docker/containers:/var/lib/docker/containers:ro,z
+      # Монтируем docker.sock, чтобы Promtail мог обогащать логи метаданными контейнеров
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    command: -config.file=/etc/promtail/config.yml
