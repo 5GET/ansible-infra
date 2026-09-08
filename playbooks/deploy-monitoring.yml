@@ -6,11 +6,13 @@
     - role: exporters
       tags: [exporters, monitoring]
 
-- name: Install monitoring stack (Prometheus + Grafana + Alertmanager)
+- name: Install monitoring stack (Prometheus + Grafana + Alertmanager + Uptime Kuma)
   hosts: monitoring
   become: true
+  
   vars_files:
     - ../inventory/group_vars/webservers_secret.yml
+    
   roles:
     - role: prometheus
       tags: [prometheus, monitoring]
@@ -20,3 +22,5 @@
       tags: [alertmanager, monitoring]
     - role: nginx_proxy
       tags: [nginx_proxy, monitoring]
+    - role: uptime_kuma
+      tags: [uptime_kuma, monitoring]
